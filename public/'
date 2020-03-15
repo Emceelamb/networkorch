@@ -1,0 +1,47 @@
+const express = require('express'),
+      app     = express()
+      server  = require('http').createServer(app),
+      io      = require('socket.io')(server),
+      path    = require('path');
+
+const PORT = process.env.PORT || 8000;
+
+let clientList = [];
+
+app.use(express.static('public'));
+
+io.on('connection', (socket)=>{
+  console.log('Connection was made!');
+  let address = socket.handshake.address;
+  address=address.split();
+  clientList.push(address);
+
+  clientList = [...new Set(clientList)];
+  io.emit('server response', `${clientList}`);
+
+  // io.sockets.socket(${socket.id}).emit(address)
+  io.emit('send ip', address)
+  console.log(`We have a client: ${socket.id}`);
+
+  });
+
+  io.on('disconnect', () =>{
+    clientList = [...new Set(clientList)];
+    let index = clientList.indexOf(socket.handshake.address);
+    console.log(clientList, index, "haha");
+    if(index > -1){
+      clientList.splice(index, 1);
+      io.emit('server response', `${clientList}`);
+      
+    }
+    console.log(`${socket.id} disconnected.`)
+  });
+
+
+app.get('/', (req, res)=>{
+  res.sendFile(path.join(__dirname +'/index.html'));
+});
+
+server.listen(PORT, ()=>{
+  console.log(`Server is up! Listening on port ${PORT}.`)
+});
