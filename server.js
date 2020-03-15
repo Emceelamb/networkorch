@@ -40,7 +40,8 @@ io.on('connection', (socket)=>{
   clientList.push(client);
   clientList = [...new Set(clientList)];
 
-  io.emit('server response', `${clientList}`);
+  io.emit('server response', clientList);
+  //io.emit('server response', `${clientList}`);
   console.log(`We have a client: ${socket.id}`);
 
   // Send IP addr to client
@@ -84,5 +85,5 @@ function setLoop(timer){
   globalTimer++;
 }
 
-setInterval(function(){{setLoop(globalTimer)}}, 500)
+setInterval(function(){{setLoop(globalTimer)}}, 1000)
 
