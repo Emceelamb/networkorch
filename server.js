@@ -8,7 +8,7 @@ const PORT = process.env.PORT || 8000;
 
 let clientList = [];
 
-const noteList = ['E3', 'C4', 'F3', 'C6']
+const noteList = ['E3', 'F3', 'G3', 'C6']
 
 app.use(express.static('public'));
 
@@ -58,11 +58,15 @@ io.on('connection', (socket)=>{
 
     if(index > -1){
       clientList.splice(index, 1);
-      io.emit('server response', `${clientList}`);
+      console.log(clientList)
+      console.log("above is clist")
+      io.json.send('server response', `${clientList}`);
       
     }
     // console.log(`${socket.id} disconnected.`, clientList.length)
 
+    // console.log( clientList )
+    // io.json.send('server response', `${clientList}`);
   });
 });
 

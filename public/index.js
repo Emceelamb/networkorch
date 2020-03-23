@@ -15,7 +15,9 @@ socket.on('server response', function(res){
   clientList = res;
   // console.log(clientList[0].note)
   console.log(clientList, clientList.length);
+  console.log(res)
 
+  $('#clients').empty();
   clientList.forEach((client)=>{
 
     $('#clients').append(
