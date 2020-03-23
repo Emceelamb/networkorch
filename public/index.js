@@ -1,26 +1,38 @@
 let PANVAR = 0; // sets pan range
 // let synths = [];
-let clientList;
+let clientList = [];
 
 let socket = io()
   socket.on('connect', function() {
   socket.emit('my event', "Connected mah boi!!!!!")
+  // function sendNote(client){
+  //   socket.broadcast.to(client).emit("play note", peer.note)
+  // } 
+
 });
 
 socket.on('server response', function(res){
   clientList = res;
   // console.log(clientList[0].note)
-  console.log(clientList);
+  console.log(clientList, clientList.length);
 
-  for (let i = 0; i < clientList.length; i++){
-    $('#clients').empty();
+  clientList.forEach((client)=>{
+
     $('#clients').append(
       `
-      <a class="clientButton" onclick="function(){sendNote(${clientList[i].socketId})"}>${clientList.address}</a>
+      <button type="button" class="clientButton" onclick="sendNote('${client.socketId}')">${client.address}</button>
       `
-    )
+    )  
+  })
+    // for (let i = 0; i < clientList.length; i++){
 
-  }
+  //   console.log(clientList[i], i)
+  //   $('#clients').append(
+  //     `
+  //     <button type="button" class="clientButton" onclick="sendNote(${clientList[i]})">${clientList[i].address}</button>
+  //     `
+  //   )
+
   // $('#peers').empty();
   // let ips = res.split(",")
   // ips.forEach((ip)=>{
@@ -47,6 +59,11 @@ socket.on('play note', (res)=>{
 
 })
 
-function sendNote(peer){
-  socket.to(peer.socketId).emit("play note", peer.note)
-}
+function sendNote(client){
+  console.log(clientList[0])
+  console.log(socket, "@")
+  console.log(client)
+  // io.sockets.socket("play note", clientList[0].note);
+  socket.broadcast.to(client).emit('play note', "j")
+  // socket.broadcast.to(client).emit("play note", peer.note)
+} 
