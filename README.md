@@ -1,7 +1,8 @@
 # Network Orchestra
 ## Quadrophonic Performance
 
-[Video demo](https://vimeo.com/400054881)
+[Video demo](https://vimeo.com/400054881)  
+
 A quadrophonic performance using computers as speakers.  
 
 ![Quad diagram](includes/quadSetup.png)
