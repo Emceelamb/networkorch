@@ -1,12 +1,15 @@
 # Network Orchestra
 ## Quadrophonic Performance
 
+[Video demo](https://vimeo.com/400054881)
 A quadrophonic performance using computers as speakers.  
 
 ![Quad diagram](includes/quadSetup.png)
 
 ## About
 This is quadrophonic speaker performance where personal computers are used as speakers. The signals are sent from a performer using master computer that sends network traffic information to a WebSocket Server which are delivered to connected clients. The server is optimized for four clients, but potentially can be scaled much higher.
+
+[]
 
 ## Setup & Installation
 - Clone the respository
