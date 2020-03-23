@@ -14,7 +14,6 @@ app.use(express.static('public'));
 
 io.on('connection', (socket)=>{
 
-
   console.log('Connection was made!');
 
   // Get IP Address of socket conn
@@ -38,9 +37,10 @@ io.on('connection', (socket)=>{
 
   // Add Client to list
   clientList.push(client);
-  clientList = [...new Set(clientList)];
+  // console.log(clientList, "listClie");
 
-  io.emit('server response', `${clientList}`);
+  io.emit('server response', clientList);
+  //io.emit('server response', `${clientList}`);
   console.log(`We have a client: ${socket.id}`);
 
   // Send IP addr to client
@@ -48,22 +48,23 @@ io.on('connection', (socket)=>{
 
   // Send note to client
   io.to(`${socket.id}`).emit('play note', note)
+
+  socket.on('disconnect', () =>{
+
+    // clientList = [...new Set(clientList)];
+    // let index = clientList.socketId.indexOf(socket.id);
+    const index = clientList.map(e => e.socketId).indexOf(socket.id)
+    console.log(index,"thisis")
+
+    if(index > -1){
+      clientList.splice(index, 1);
+      io.emit('server response', `${clientList}`);
+      
+    }
+    // console.log(`${socket.id} disconnected.`, clientList.length)
+
   });
-
-io.on('disconnect', () =>{
-
-clientList = [...new Set(clientList)];
-  let index = clientList.indexOf(socket.handshake.address);
-  console.log(clientList, index, "haha");
-
-  if(index > -1){
-    clientList.splice(index, 1);
-    io.emit('server response', `${clientList}`);
-    
-  }
-  console.log(`${socket.id} disconnected.`)
 });
-
 
 app.get('/', (req, res)=>{
   res.sendFile(path.join(__dirname +'/index.html'));
@@ -80,9 +81,11 @@ function setLoop(timer){
   let index = timer % clientList.length 
 
   //console.log(clientList[index].socketId, clientList[index].note)
-  io.to(clientList[index].socketId).emit('play note',  clientList[index].note)
+  if(clientList.length>0){
+    io.to(clientList[index].socketId).emit('play note',  clientList[index].note)
+  }
   globalTimer++;
 }
 
-setInterval(function(){{setLoop(globalTimer)}}, 500)
+setInterval(function(){{setLoop(globalTimer)}}, 1000)
 
